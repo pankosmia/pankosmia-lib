@@ -1,6 +1,6 @@
 
-import {getJson, getAndSetJson, getText} from "./getLib";
-import {postEmptyJson, postJson, postText} from "./postLib";
+import {getJson, getAndSetJson, getText} from "./getLib.js";
+import {postEmptyJson, postJson, postText} from "./postLib.js";
 
 export {
     getJson,

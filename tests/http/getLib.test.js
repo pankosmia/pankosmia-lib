@@ -1,5 +1,5 @@
 import test from "tape";
-import { getJson, getText, getAndSetJson } from "../../src/http/getLib.js";
+import { getJson, getText, getAndSetJson }  from "../../src/http/index.js"
 
 const URL = "http://127.0.0.1:19119/api/client-interfaces";
 
