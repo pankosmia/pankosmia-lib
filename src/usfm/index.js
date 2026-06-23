@@ -1,3 +1,3 @@
-import { getBookCode } from "./usfmUtils";
+import { getBookCode } from "./usfmUtils.js";
 
 export { getBookCode };
