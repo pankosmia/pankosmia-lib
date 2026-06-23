@@ -1,6 +1,6 @@
 {
   "name": "pankosmia-lib",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "type": "module",
   "main": "./index.js",
   "files": [
@@ -13,7 +13,7 @@
     "test": "node tests/run-tests.js"
   },
   "exports": {
-    "./html": "./src/html/index.js",
+    "./http": "./src/http/index.js",
     "./i18n": "./src/i18n/index.js",
     "./usfm": "./src/usfm/index.js"
   },
