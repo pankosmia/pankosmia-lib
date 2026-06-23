@@ -3,7 +3,7 @@ import {
     postEmptyJson,
     postJson,
     postText
-} from "../../src/html/postLib.js";
+} from "../../src/http/postLib.js";
 
 const URL = "http://127.0.0.1:19119/api/settings/languages/";
 
