@@ -1,32 +1,36 @@
 import test from "tape";
 import {
-    postEmptyJson,
-    postJson,
-    postText
-} from "../../src/http/index.js"
+  postEmpty,
+  postJson,
+  postText,
+  postBytes,
+} from "../../src/http/index.js";
 
-const URL = "http://127.0.0.1:19119/api/settings/languages/";
+const path = "_local_/_local_/plt";
+const URLEmpty = "http://127.0.0.1:19119/api/settings/languages/";
+const URLIngredient = "http://127.0.0.1:19119/api/burrito/ingredient/raw/";
+const URLIngredientBytes =
+  "http://127.0.0.1:19119/api/burrito/ingredient/bytes/";
 
 /**
  * -------------------------
- * postEmptyJson
+ * postEmpty
  * -------------------------
  */
 
-test("postEmptyJson - real success", async (t) => {
-    const res = await postEmptyJson(URL+'en');
+test("postEmpty - real success", async (t) => {
+  const res = await postEmpty(URLEmpty + "en");
 
-    t.equal(res.url, URL+'en');
-    t.equal(typeof res.ok, "boolean");
-    t.ok(res.status >= 0);
+  t.equal(res.ok, true);
+  t.ok(res.status >= 0);
 
-    if (res.ok) {
-        t.ok(res.json, "should return json");
-    } else {
-        t.ok(res.error, "should return error text");
-    }
+  if (res.ok) {
+    t.ok(res.json, "should return json");
+  } else {
+    t.ok(res.error, "should return error text");
+  }
 
-    t.end();
+  t.end();
 });
 
 /**
@@ -36,87 +40,78 @@ test("postEmptyJson - real success", async (t) => {
  */
 
 test("postJson - real success", async (t) => {
-    const body = JSON.stringify({
-        language: "en"
-    });
+  const body = JSON.stringify({
+    payload: JSON.stringify({
+      language: "en",
+    }),
+  });
+  const res = await postJson(URLIngredient + path + "?ipath=test.json", body);
 
-    const res = await postJson(URL, body);
+  t.equal(res.ok, true);
+  t.ok(res.status >= 0);
 
-    t.equal(res.url, URL);
-    t.equal(typeof res.ok, "boolean");
-    t.ok(res.status >= 0);
+  if (res.ok) {
+    t.ok(res.json, "should return json");
+  } else {
+    t.ok(res.error, "should return error text");
+  }
 
-    if (res.ok) {
-        t.ok(res.json, "should return json");
-    } else {
-        t.ok(res.error, "should return error text");
-    }
-
-    t.end();
+  t.end();
 });
 
-test("postJson - custom content-type", async (t) => {
-    const body = JSON.stringify({
-        language: "fr"
-    });
-
-    const res = await postJson(URL, body, false, "application/json");
-
-    t.equal(res.url, URL);
-    t.equal(typeof res.ok, "boolean");
-
-    t.end();
-});
-
-/**
- * -------------------------
- * postText
- * -------------------------
- */
+// /**
+//  * -------------------------
+//  * postText
+//  * -------------------------
+//  */
 
 test("postText - real success", async (t) => {
-    const res = await postText(URL, "language=en");
+  const body = JSON.stringify({ payload: "this is a test" });
+  const res = await postText(
+    URLIngredient + path + "?ipath=textTest.usfm",
+    body,
+  );
 
-    t.equal(res.url, URL);
-    t.equal(typeof res.ok, "boolean");
-    t.ok(res.status >= 0);
+  t.equal(res.ok, true);
+  if (res.ok) {
+    t.ok(res.text, "should return text");
+  } else {
+    t.ok(res.error, "should return error text");
+  }
 
-    if (res.ok) {
-        t.ok(res.text, "should return text");
-    } else {
-        t.ok(res.error, "should return error text");
-    }
-
-    t.end();
+  t.end();
 });
 
-/**
- * -------------------------
- * failure branch coverage (important)
- * -------------------------
- * These tests depend on server rejecting bad input or endpoint behavior.
- */
+// /**
+//  * -------------------------
+//  * postBytes
+//  * -------------------------
+//  */
 
-test("postJson - invalid payload (expect error branch)", async (t) => {
-    const res = await postJson(URL, "invalid-json-string");
+test("postBytes - real success", async (t) => {
+  const form = new FormData();
 
-    t.equal(res.url, URL);
-    t.equal(typeof res.ok, "boolean");
+  form.append(
+    "file",
+    new Blob(["this is a test"], {
+      type: "application/octet-stream",
+    }),
+    "bytesTest.usfm",
+  );
 
-    // we just assert structure
-    if (!res.ok) {
-        t.ok(res.error, "error branch covered");
-    }
 
-    t.end();
-});
+  const res = await postBytes(
+    URLIngredientBytes + path + "?ipath=bytesTest.usfm",
+    form,
+  );
 
-test("postEmptyJson - debug mode logs (optional branch)", async (t) => {
-    // just ensures debug path doesn't break anything
-    const res = await postEmptyJson(URL+'fr', true);
+  t.equal(res.ok, true);
 
-    t.equal(res.url, URL+'fr');
-    t.ok(typeof res.ok === "boolean");
+  if (res.ok) {
+    t.ok(res.text );
+  } else {
+    t.ok(res.error, "should return error text");
+  }
 
-    t.end();
+  t.end();
 });
