@@ -33,7 +33,7 @@ const targetPlt = path.join(
   "plt",
 );
 
-const sourcePlt = path.resolve("./plt");
+const sourcePlt = path.resolve("./tests/Data/plt");
 
 console.log(`Copying plt:`);
 console.log(`  From: ${sourcePlt}`);
