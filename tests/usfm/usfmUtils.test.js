@@ -1,6 +1,6 @@
 
 import test from "tape";
-import { getBookCode } from "../../src/usfm/usfmUtils.js";
+import { getBookCode } from "../../src/usfm/index.js";
 
 // 1. valid case
 test("getBookCode returns valid book code", (t) => {

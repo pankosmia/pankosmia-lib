@@ -1,8 +1,13 @@
 {
   "name": "pankosmia-lib",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "module",
   "main": "./index.js",
+  "packageManager": "pnpm@11.20.0",
+  "engines": {
+    "node": ">=24",
+    "pnpm": "11.20.0"
+  },
   "files": [
     "src",
     "index.js",
