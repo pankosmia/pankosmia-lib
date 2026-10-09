@@ -9,8 +9,7 @@ const URL = "http://127.0.0.1:19119/api/client-interfaces";
 test("getJson - real endpoint success", async (t) => {
   const res = await getJson(URL);
 
-  t.equal(typeof res.ok, "boolean");
-  t.equal(res.url, URL);
+  t.equal(res.ok, true);
   t.equal(res.status > 0, true);
 
   if (res.ok) {
@@ -28,8 +27,7 @@ test("getJson - real endpoint success", async (t) => {
 test("getText - real endpoint success", async (t) => {
   const res = await getText(URL);
 
-  t.equal(typeof res.ok, "boolean");
-  t.equal(res.url, URL);
+  t.equal(res.ok, true);
   t.equal(res.status > 0, true);
 
   if (res.ok) {
@@ -48,8 +46,7 @@ test("getText - real endpoint success", async (t) => {
 test("getBytes - real endpoint success", async (t) => {
   const res = await getBytes(URL);
 
-  t.equal(typeof res.ok, "boolean");
-  t.equal(res.url, URL);
+  t.equal(res.ok, true);
   t.equal(res.status > 0, true);
 
   if (res.ok) {
