@@ -22,20 +22,17 @@ function findTests(dir) {
   return tests;
 }
 
-// Current user
 const user = os.userInfo().username;
 console.log(`Running as user: ${user}`);
 
-// ~/pankosmia_repos/_local_/_local_/plt
 const targetPlt = path.join(
   os.homedir(),
   "pankosmia_repos",
   "_local_",
   "_local_",
-  "plt"
+  "plt",
 );
 
-// plt is next to this script/repo
 const sourcePlt = path.resolve("./plt");
 
 console.log(`Copying plt:`);
@@ -46,37 +43,49 @@ if (!fs.existsSync(sourcePlt)) {
   throw new Error(`plt folder not found: ${sourcePlt}`);
 }
 
-// Remove existing plt
 if (fs.existsSync(targetPlt)) {
   console.log(`Removing existing plt: ${targetPlt}`);
 
   fs.rmSync(targetPlt, {
     recursive: true,
-    force: true
+    force: true,
   });
 }
 
-// Make sure parent directory exists
 fs.mkdirSync(path.dirname(targetPlt), {
-  recursive: true
+  recursive: true,
 });
 
-// Copy fresh plt
 fs.cpSync(sourcePlt, targetPlt, {
-  recursive: true
+  recursive: true,
 });
 
 console.log("✓ plt copied successfully\n");
 
-// Run tests
 const ROOT = path.resolve("./tests");
 const tests = findTests(ROOT);
 
 console.log(`Running ${tests.length} test files...\n`);
 
-for (const t of tests) {
-  console.log("▶", t);
+try {
+  for (const testFile of tests) {
+    console.log("▶", testFile);
+    await import(path.resolve(testFile));
+  }
 
-  await import(path.resolve(t));
+  // Give Tape's asynchronous tests time to finish.
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  console.log("\n✓ Tests completed");
+} finally {
+  if (fs.existsSync(targetPlt)) {
+    console.log(`\nRemoving test plt: ${targetPlt}`);
+
+    fs.rmSync(targetPlt, {
+      recursive: true,
+      force: true,
+    });
+
+    console.log("✓ test plt removed");
+  }
 }
-

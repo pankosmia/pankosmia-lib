@@ -105,10 +105,10 @@ test("postBytes - real success", async (t) => {
     form,
   );
 
-  t.equal(res.ok, true);
+  t.equal(res.ok,true);
 
   if (res.ok) {
-    t.ok(res.text );
+    t.ok(res.text, "should contain text");
   } else {
     t.ok(res.error, "should return error text");
   }

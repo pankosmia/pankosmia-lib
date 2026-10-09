@@ -28,7 +28,7 @@ test("getText - real endpoint success", async (t) => {
   const res = await getText(URL);
 
   t.equal(res.ok, true);
-  t.equal(res.status > 0, true);
+  t.equal(res.status > 0,true);
 
   if (res.ok) {
     t.ok(res.text, "should contain text");
