@@ -2,6 +2,18 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 
+async function isServerAvailable(url) {
+  try {
+    const response = await fetch(url, {
+      signal: AbortSignal.timeout(2000),
+    });
+
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
 function findTests(dir) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
 
@@ -21,6 +33,20 @@ function findTests(dir) {
 
   return tests;
 }
+
+const SERVER_URL = "http://127.0.0.1:19119/";
+
+console.log(`Checking test server: ${SERVER_URL}`);
+
+if (!(await isServerAvailable(SERVER_URL))) {
+  console.error(
+    `\n✗ Test server is not available at ${SERVER_URL}`
+  );
+  console.error("Aborting tests.\n");
+  process.exit(1);
+}
+
+console.log("✓ Test server is available\n");
 
 const user = os.userInfo().username;
 console.log(`Running as user: ${user}`);
