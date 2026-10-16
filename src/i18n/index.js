@@ -1,3 +1,3 @@
-import { doI18n } from "./i18nLib.js";
+import { doI18n, doInterpolatedI18n } from "./i18nLib.js";
 
-export { doI18n };
+export { doI18n, doInterpolatedI18n };
